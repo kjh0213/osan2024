@@ -1,0 +1,66 @@
+<html>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
+<button type="button" onclick="startSort()">StartSorting</button>
+<div><canvas id="myChart" height="80"></div>
+<div id="debug">tried</div>
+<script>
+let total = 1000;
+loop = 0;
+tryed = 0;
+function startSort() {
+    count = 0
+    let interval = setInterval(() => {
+        if (count >= total-1) {
+            clearInterval(interval);
+        }
+        min = 1000
+        k=0
+        for ( let i=loop ; i<(sortedArray.length) ; i++ ){ 
+            if ( sortedArray[i] < min ) {
+                min = sortedArray[i]
+                k = i
+            }
+        }
+        if ( k != loop ) {  // loop 대신 k와 비교해서 바꿔야 할 위치인지 확인
+            tmp = sortedArray[loop]
+            sortedArray[loop] = sortedArray[k]
+            sortedArray[k] = tmp  
+        }
+        myChart.update()
+        loop++;
+        count++;
+    }, 100);
+}
+let ctx = document.getElementById('myChart').getContext('2d');
+let myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'random number',
+            data: [],
+            borderColor: 'black',
+            backgroundColor: 'rgba(255, 99, 132, 0.1)',
+        },
+        {
+            label: 'sorted number',
+            data: [],
+            borderColor: 'blue',
+            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+        }]
+    },
+    options: { }
+});
+let randomArray = myChart.data.datasets[0].data;
+let sortedArray = myChart.data.datasets[1].data;
+for ( let i=0 ; i<total ; i++) {
+   num = Math.floor(Math.random()*100);
+   myChart.data.labels[i] = i;
+   randomArray[i] = num;
+   sortedArray[i] = num;
+}
+myChart.update()
+</script>
+</body>
+</html>
